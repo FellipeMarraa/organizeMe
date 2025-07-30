@@ -87,7 +87,7 @@ const Login: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-cyan-500 via-white to-cyan-200 flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -181,7 +181,7 @@ const Login: React.FC = () => {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
                   >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showPassword ? <EyeOff className="h-4 w-4 cursor-pointer" /> : <Eye className="h-4 w-4 cursor-pointer" />}
                   </button>
                 </div>
               </div>
@@ -229,21 +229,20 @@ const Login: React.FC = () => {
             </Button>
 
             <div className="text-center">
-              <button
-                type="button"
+              <a
                 onClick={() => setIsLogin(!isLogin)}
-                className="text-sm text-primary hover:underline"
+                className="text-sm text-primary hover:underline cursor-pointer"
               >
                 {isLogin ? "Não tem uma conta? Criar conta" : "Já tem uma conta? Fazer login"}
-              </button>
+              </a>
             </div>
           </CardContent>
         </Card>
 
         <div className="text-center mt-6">
-          <button onClick={() => navigate("/")} className="text-sm text-gray-600 hover:text-gray-900">
+          <a onClick={() => navigate("/")} className="text-sm text-gray-600 hover:text-gray-900 cursor-pointer">
             ← Voltar para página inicial
-          </button>
+          </a>
         </div>
       </motion.div>
     </div>

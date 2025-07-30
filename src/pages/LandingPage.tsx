@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 import { useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { CheckCircle, Calendar, BookOpen, Cloud, Smartphone, Shield } from "lucide-react"
+import {CheckCircle, Calendar, BookOpen, Cloud, Smartphone, Shield, Book} from "lucide-react"
 
 const LandingPage: React.FC = () => {
   const navigate = useNavigate()
@@ -47,7 +47,7 @@ const LandingPage: React.FC = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
+    <div className="bg-gradient-to-br from-cyan-500 via-white to-cyan-200 p-2">
       {/* Header */}
       <header className="container mx-auto px-4 py-6">
         <nav className="flex justify-between items-center">
@@ -63,10 +63,10 @@ const LandingPage: React.FC = () => {
           </motion.div>
 
           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-x-4">
-            <Button variant="ghost" onClick={() => navigate("/login")}>
+            <Button onClick={() => navigate("/login")}>
               Entrar
             </Button>
-            <Button onClick={() => navigate("/login")}>Começar Agora</Button>
+            {/*<Button onClick={() => navigate("/login")}>Começar Agora</Button>*/}
           </motion.div>
         </nav>
       </header>
@@ -85,9 +85,6 @@ const LandingPage: React.FC = () => {
           <div className="space-x-4">
             <Button size="lg" onClick={() => navigate("/login")}>
               Começar Gratuitamente
-            </Button>
-            <Button variant="outline" size="lg">
-              Ver Demonstração
             </Button>
           </div>
         </motion.div>
@@ -157,7 +154,7 @@ const LandingPage: React.FC = () => {
               viewport={{ once: true }}
               className="relative"
             >
-              <div className="bg-gradient-to-br from-primary to-purple-600 rounded-2xl p-8 text-white">
+              <div className="bg-gradient-to-br from-primary to-blue-300 rounded-2xl p-8 text-white">
                 <h3 className="text-2xl font-bold mb-4">Comece hoje mesmo!</h3>
                 <p className="text-lg mb-6 opacity-90">
                   Junte-se a milhares de usuários que já organizaram suas vidas com o OrganizeMe.
@@ -185,7 +182,7 @@ const LandingPage: React.FC = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
+      <footer className="bg-gray-900 text-white py-12 bottom-0">
         <div className="container mx-auto px-4 text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
@@ -193,7 +190,11 @@ const LandingPage: React.FC = () => {
             </div>
             <span className="text-2xl font-bold">OrganizeMe</span>
           </div>
-          <p className="text-gray-400">© 2024 OrganizeMe. Todos os direitos reservados.</p>
+          <div className="flex items-center justify-center space-x-1">
+            <p className="text-gray-400">Feito pra você que esqueceu o caderno</p>
+            <Book className="h-5 w-5 text-gray-400" />
+          </div>
+          {/*<p className="text-gray-400 bottom-0">© 2025 OrganizeMe</p>*/}
         </div>
       </footer>
     </div>
