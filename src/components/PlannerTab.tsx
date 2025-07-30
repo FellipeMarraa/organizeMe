@@ -41,6 +41,7 @@ import {
   isToday,
 } from "date-fns"
 import { ptBR } from "date-fns/locale"
+import {ConfirmDialog} from "@/components/confirm-dialog.tsx";
 
 const PlannerTab: React.FC = () => {
   const { user } = useAuth()
@@ -58,6 +59,10 @@ const PlannerTab: React.FC = () => {
     time: "",
     tags: "",
   })
+
+  const [confirmOpen, setConfirmOpen] = useState(false)
+  const [taskToDelete, setTaskToDelete] = useState<Task | null>(null)
+
 
   useEffect(() => {
     if (user) {
@@ -147,17 +152,17 @@ const PlannerTab: React.FC = () => {
     setIsDialogOpen(true)
   }
 
-  const handleDelete = async (id: string) => {
-    if (window.confirm("Tem certeza que deseja excluir esta tarefa?")) {
-      try {
-        const { error } = await deleteTask(id)
-        if (!error) {
-          await loadTasks()
-        }
-      } catch (error) {
-        console.error("Erro ao excluir tarefa:", error)
-      }
-    }
+  const confirmDelete = async () => {
+    if (!taskToDelete) return
+    await deleteTask(taskToDelete.id)
+    await loadTasks()
+    setConfirmOpen(false)
+    setTaskToDelete(null)
+  }
+
+  const handleDelete = (task: Task) => {
+    setTaskToDelete(task)
+    setConfirmOpen(true)
   }
 
   const toggleTaskComplete = async (task: Task) => {
@@ -248,16 +253,21 @@ const PlannerTab: React.FC = () => {
               <div className={`text-sm font-medium mb-1 ${isCurrentDay ? "text-primary" : ""}`}>{format(day, "d")}</div>
               <div className="space-y-1">
                 {dayTasks.slice(0, 2).map((task) => (
-                  <div
-                    key={task.id}
-                    className={`text-xs p-1 rounded truncate ${
-                      task.completed ? "bg-green-100 text-green-800 line-through" : "bg-blue-100 text-blue-800"
-                    }`}
-                  >
-                    {task.time && `${formatTime(task.time)} `}
-                    {task.title}
-                  </div>
+                    <div
+                        key={task.id}
+                        className={`text-xs p-1 rounded truncate cursor-pointer ${
+                            task.completed ? "bg-green-100 text-green-800 line-through" : "bg-blue-100 text-blue-800"
+                        }`}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleEdit(task)
+                        }}
+                    >
+                      {task.time && `${formatTime(task.time)} `}
+                      {task.title}
+                    </div>
                 ))}
+
                 {dayTasks.length > 2 && <div className="text-xs text-gray-500">+{dayTasks.length - 2} mais</div>}
               </div>
             </motion.div>
@@ -408,7 +418,7 @@ const PlannerTab: React.FC = () => {
                         <Button variant="outline" size="icon" onClick={() => handleEdit(task)}>
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="outline" size="icon" onClick={() => handleDelete(task.id)}>
+                        <Button variant="outline" size="icon" onClick={() => handleDelete(task)}>
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -541,7 +551,7 @@ const PlannerTab: React.FC = () => {
         </div>
 
         <Select value={viewType} onValueChange={(value: ViewType) => setViewType(value)}>
-          <SelectTrigger className="w-full mt-4 cursor-pointer">
+          <SelectTrigger className="w-full lg:w-60 mt-4 cursor-pointer bg-white">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -563,6 +573,11 @@ const PlannerTab: React.FC = () => {
         {viewType === "weekly" && renderWeeklyView()}
         {viewType === "daily" && renderDailyView()}
       </motion.div>
+      <ConfirmDialog
+          open={confirmOpen}
+          onCancel={() => setConfirmOpen(false)}
+          onConfirm={confirmDelete}
+      />
     </div>
   )
 }

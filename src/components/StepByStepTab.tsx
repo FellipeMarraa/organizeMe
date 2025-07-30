@@ -20,9 +20,10 @@ import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { Plus, BookOpen, Edit, Trash2, ChevronDown, ChevronRight } from "lucide-react"
 import { useAuth } from "@/contexts/AuthContext"
-import { createStepByStep, getStepBySteps, updateStepByStep, deleteStepByStep } from "@/services/firestore"
-import type { StepByStep } from "@/types"
+import {createStepByStep, getStepBySteps, updateStepByStep, deleteStepByStep} from "@/services/firestore"
+import type {StepByStep} from "@/types"
 import { formatDate } from "@/lib/utils"
+import {ConfirmDialog} from "@/components/confirm-dialog.tsx";
 
 const StepByStepTab: React.FC = () => {
   const { user } = useAuth()
@@ -36,6 +37,9 @@ const StepByStepTab: React.FC = () => {
     description: "",
     steps: [""],
   })
+
+  const [confirmOpen, setConfirmOpen] = useState(false)
+  const [stepToDelete, setStepToDelete] = useState<StepByStep | null>(null)
 
   useEffect(() => {
     if (user) {
@@ -82,6 +86,26 @@ const StepByStepTab: React.FC = () => {
       ...formData,
       steps: [...formData.steps, ""],
     })
+  }
+
+  const confirmDelete = async () => {
+    if (!stepToDelete) return
+    try {
+      const { error } = await deleteStepByStep(stepToDelete.id)
+      if (!error) {
+        await loadStepBySteps()
+      }
+    } catch (error) {
+      console.error("Erro ao excluir passo a passo:", error)
+    } finally {
+      setConfirmOpen(false)
+      setStepToDelete(null)
+    }
+  }
+
+  const handleDelete = (step: StepByStep) => {
+    setStepToDelete(step)
+    setConfirmOpen(true)
   }
 
   const removeStep = (index: number) => {
@@ -138,19 +162,6 @@ const StepByStepTab: React.FC = () => {
       steps: item.steps,
     })
     setIsDialogOpen(true)
-  }
-
-  const handleDelete = async (id: string) => {
-    if (window.confirm("Tem certeza que deseja excluir este passo a passo?")) {
-      try {
-        const { error } = await deleteStepByStep(id)
-        if (!error) {
-          await loadStepBySteps()
-        }
-      } catch (error) {
-        console.error("Erro ao excluir passo a passo:", error)
-      }
-    }
   }
 
   const resetForm = () => {
@@ -318,7 +329,7 @@ const StepByStepTab: React.FC = () => {
                         <Button variant="outline" size="icon" onClick={() => handleEdit(item)}>
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="outline" size="icon" onClick={() => handleDelete(item.id)}>
+                        <Button variant="outline" size="icon" onClick={() => handleDelete(item)}>
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -354,6 +365,11 @@ const StepByStepTab: React.FC = () => {
           </AnimatePresence>
         </div>
       )}
+      <ConfirmDialog
+          open={confirmOpen}
+          onCancel={() => setConfirmOpen(false)}
+          onConfirm={confirmDelete}
+      />
     </div>
   )
 }
