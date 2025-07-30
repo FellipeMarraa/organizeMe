@@ -198,7 +198,7 @@ const StepByStepTab: React.FC = () => {
           <DialogTrigger asChild>
             <Button>
               <Plus className="h-4 w-4" />
-              Novo processo
+              Novo
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
@@ -334,7 +334,7 @@ const StepByStepTab: React.FC = () => {
                         transition={{ duration: 0.2 }}
                       >
                         <CardContent>
-                          <div className="space-y-3">
+                          <div className="space-y-3 max-h-80 overflow-auto">
                             {item.steps.map((step, stepIndex) => (
                               <div key={stepIndex} className="flex items-start space-x-3">
                                 <Badge variant="default" className="min-w-[2rem] justify-center mt-0.5">

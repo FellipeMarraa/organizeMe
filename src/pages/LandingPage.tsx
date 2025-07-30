@@ -59,7 +59,7 @@ const LandingPage: React.FC = () => {
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
               <CheckCircle className="h-5 w-5 text-white" />
             </div>
-            <span className="text-2xl font-bold text-gray-900">OrganizeMe</span>
+            <span className="text-2xl font-bold text-gray-900">I forgot my book</span>
           </motion.div>
 
           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-x-4">
@@ -79,7 +79,7 @@ const LandingPage: React.FC = () => {
             <span className="text-primary block">sob controle</span>
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            OrganizeMe é a solução completa para organizar sua rotina pessoal ou profissional. Registre processos,
+            I forgot my book é a solução completa para organizar sua rotina pessoal ou profissional. Registre processos,
             planeje seu tempo e acesse tudo de qualquer lugar.
           </p>
           <div className="space-x-4">
@@ -130,7 +130,7 @@ const LandingPage: React.FC = () => {
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">Por que escolher o OrganizeMe?</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">Por que escolher o I forgot my book?</h2>
               <div className="space-y-4">
                 {benefits.map((benefit, index) => (
                   <motion.div
@@ -157,7 +157,7 @@ const LandingPage: React.FC = () => {
               <div className="bg-gradient-to-br from-primary to-blue-300 rounded-2xl p-8 text-white">
                 <h3 className="text-2xl font-bold mb-4">Comece hoje mesmo!</h3>
                 <p className="text-lg mb-6 opacity-90">
-                  Junte-se a milhares de usuários que já organizaram suas vidas com o OrganizeMe.
+                  Junte-se a milhares de usuários que já organizaram suas vidas com o I forgot my book.
                 </p>
                 <Button size="lg" variant="secondary" onClick={() => navigate("/login")} className="w-full">
                   Criar Conta Gratuita
@@ -188,13 +188,13 @@ const LandingPage: React.FC = () => {
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
               <CheckCircle className="h-5 w-5 text-white" />
             </div>
-            <span className="text-2xl font-bold">OrganizeMe</span>
+            <span className="text-2xl font-bold">I forgot my book</span>
           </div>
           <div className="flex items-center justify-center space-x-1">
             <p className="text-gray-400">Feito pra você que esqueceu o caderno</p>
             <Book className="h-5 w-5 text-gray-400" />
           </div>
-          {/*<p className="text-gray-400 bottom-0">© 2025 OrganizeMe</p>*/}
+          {/*<p className="text-gray-400 bottom-0">© 2025 I forgot my book</p>*/}
         </div>
       </footer>
     </div>

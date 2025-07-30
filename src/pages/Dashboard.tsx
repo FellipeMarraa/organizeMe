@@ -55,8 +55,8 @@ const Dashboard: React.FC = () => {
                 <BookOpen className="h-5 w-5 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">OrganizeMe</h1>
-                <p className="text-sm text-gray-600">Bem-vindo, {user.displayName || user.email}</p>
+                <h1 className="text-xl w-full font-bold text-gray-900">I forgot my book</h1>
+                <p className="text-sm text-gray-600">Bem-vindo, {user.displayName}</p>
               </div>
             </motion.div>
 
@@ -84,12 +84,12 @@ const Dashboard: React.FC = () => {
       <main className="container mx-auto px-4 py-8">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
           <Tabs defaultValue="stepbystep" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="stepbystep" className="flex items-center space-x-2">
+            <TabsList className="grid w-full grid-cols-2 ">
+              <TabsTrigger value="stepbystep" className="flex items-center space-x-2 cursor-pointer">
                 <BookOpen className="h-4 w-4" />
                 <span>Passo a Passo</span>
               </TabsTrigger>
-              <TabsTrigger value="planner" className="flex items-center space-x-2">
+              <TabsTrigger value="planner" className="flex items-center space-x-2 cursor-pointer">
                 <Calendar className="h-4 w-4" />
                 <span>Planner</span>
               </TabsTrigger>

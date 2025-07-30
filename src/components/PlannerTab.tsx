@@ -220,7 +220,11 @@ const PlannerTab: React.FC = () => {
           </div>
         ))}
         {days.map((day, index) => {
-          const dayTasks = getTasksForDate(day)
+          const dayTasks = getTasksForDate(day).sort((a, b) => {
+            if (!a.time) return 1
+            if (!b.time) return -1
+            return a.time.localeCompare(b.time)
+          })
           const isCurrentMonth = isSameMonth(day, currentDate)
           const isCurrentDay = isToday(day)
 
@@ -233,7 +237,7 @@ const PlannerTab: React.FC = () => {
               className={`
                 min-h-[100px] p-2 border rounded-lg cursor-pointer transition-colors
                 ${isCurrentMonth ? "bg-white hover:bg-gray-50" : "bg-gray-50 text-gray-400"}
-                ${isCurrentDay ? "ring-2 ring-primary" : ""}
+                ${isCurrentDay ? "ring-2 ring-primary sm:ml-1 sm:mr-1" : ""}
               `}
               onClick={() => {
                 setSelectedDate(day)
@@ -268,9 +272,13 @@ const PlannerTab: React.FC = () => {
     const days = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i))
 
     return (
-      <div className="grid grid-cols-1 gap-4 max-h-full overflow-y-auto">
+      <div className="grid sm:grid-cols-1 lg:grid-cols-7 gap-4 max-h-full overflow-y-auto">
         {days.map((day, index) => {
-          const dayTasks = getTasksForDate(day)
+          const dayTasks = getTasksForDate(day).sort((a, b) => {
+            if (!a.time) return 1
+            if (!b.time) return -1
+            return a.time.localeCompare(b.time)
+          })
           const isCurrentDay = isToday(day)
 
           return (
@@ -280,7 +288,7 @@ const PlannerTab: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
             >
-              <Card className={isCurrentDay ? "ring-2 ring-primary mr-1 ml-1" : ""}>
+              <Card className={isCurrentDay ? "ring-2 ring-primary sm:mr-1 sm:ml-1 mt-1" : ""}>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm">{format(day, "EEE", { locale: ptBR })}</CardTitle>
                   <CardDescription className={isCurrentDay ? "text-primary font-medium" : ""}>
@@ -514,7 +522,7 @@ const PlannerTab: React.FC = () => {
       </div>
 
       {/* View Controls */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col items-center">
         <div className="flex items-center space-x-2">
           <Button variant="outline" size="icon" onClick={() => navigateDate("prev")}>
             <ChevronLeft className="h-4 w-4" />
@@ -533,13 +541,13 @@ const PlannerTab: React.FC = () => {
         </div>
 
         <Select value={viewType} onValueChange={(value: ViewType) => setViewType(value)}>
-          <SelectTrigger className="w-[140px]">
+          <SelectTrigger className="w-full mt-4 cursor-pointer">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="monthly">Mensal</SelectItem>
-            <SelectItem value="weekly">Semanal</SelectItem>
-            <SelectItem value="daily">Diário</SelectItem>
+            <SelectItem className="cursor-pointer" value="monthly">Mensal</SelectItem>
+            <SelectItem className="cursor-pointer" value="weekly">Semanal</SelectItem>
+            <SelectItem className="cursor-pointer" value="daily">Diário</SelectItem>
           </SelectContent>
         </Select>
       </div>

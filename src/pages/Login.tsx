@@ -105,7 +105,7 @@ const Login: React.FC = () => {
             <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
               <CheckCircle className="h-6 w-6 text-white" />
             </div>
-            <span className="text-3xl font-bold text-gray-900">OrganizeMe</span>
+            <span className="text-3xl font-bold text-gray-900">I forgot my book</span>
           </motion.div>
           <p className="text-gray-600">Sua rotina sob controle</p>
         </div>
