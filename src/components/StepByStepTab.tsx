@@ -197,8 +197,8 @@ const StepByStepTab: React.FC = () => {
         >
           <DialogTrigger asChild>
             <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              Novo Passo a Passo
+              <Plus className="h-4 w-4" />
+              Novo processo
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
@@ -213,7 +213,7 @@ const StepByStepTab: React.FC = () => {
                 <Input
                   id="title"
                   name="title"
-                  placeholder="Ex: Como criar uma branch no Git"
+                  placeholder="Ex: Como criar uma planilha"
                   value={formData.title}
                   onChange={handleInputChange}
                   required
@@ -234,7 +234,7 @@ const StepByStepTab: React.FC = () => {
 
               <div className="space-y-2">
                 <Label>Passos</Label>
-                <div className="space-y-2">
+                <div className="space-y-2 max-h-60 overflow-auto">
                   {formData.steps.map((step, index) => (
                     <div key={index} className="flex items-center space-x-2">
                       <Badge variant="outline" className="min-w-[2rem] justify-center">

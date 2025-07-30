@@ -94,7 +94,8 @@ const PlannerTab: React.FC = () => {
     e.preventDefault()
     if (!user) return
 
-    const taskDate = new Date(formData.date)
+    const [year, month, day] = formData.date.split("-").map(Number)
+    const taskDate = new Date(year, month - 1, day, 12)
     const tags = formData.tags
       .split(",")
       .map((tag) => tag.trim())
@@ -267,7 +268,7 @@ const PlannerTab: React.FC = () => {
     const days = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i))
 
     return (
-      <div className="grid grid-cols-7 gap-4">
+      <div className="grid grid-cols-1 gap-4 max-h-full overflow-y-auto">
         {days.map((day, index) => {
           const dayTasks = getTasksForDate(day)
           const isCurrentDay = isToday(day)
@@ -279,14 +280,14 @@ const PlannerTab: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
             >
-              <Card className={isCurrentDay ? "ring-2 ring-primary" : ""}>
+              <Card className={isCurrentDay ? "ring-2 ring-primary mr-1 ml-1" : ""}>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm">{format(day, "EEE", { locale: ptBR })}</CardTitle>
                   <CardDescription className={isCurrentDay ? "text-primary font-medium" : ""}>
                     {format(day, "d MMM", { locale: ptBR })}
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-2">
+                <CardContent className="space-y-2 max-h-40 overflow-y-auto">
                   {dayTasks.map((task) => (
                     <div
                       key={task.id}
