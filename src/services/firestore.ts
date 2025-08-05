@@ -74,12 +74,23 @@ export const deleteStepByStep = async (id: string) => {
 // Task operations
 export const createTask = async (task: Omit<Task, "id" | "createdAt" | "updatedAt">) => {
   try {
-    const docRef = await addDoc(collection(db, "tasks"), {
-      ...task,
+    const taskData: any = {
+      userId: task.userId,
+      title: task.title,
+      description: task.description,
       date: Timestamp.fromDate(task.date),
+      tags: task.tags,
+      completed: task.completed,
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
-    })
+    }
+
+    if (task.time) {
+      taskData.time = task.time
+    }
+
+    const docRef = await addDoc(collection(db, "tasks"), taskData)
+
     return { id: docRef.id, error: null }
   } catch (error: any) {
     return { id: null, error: error.message }

@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { Plus, BookOpen, Edit, Trash2, ChevronDown, ChevronRight } from "lucide-react"
+import {Plus, BookOpen, Edit, Trash2, ChevronDown, ChevronRight, Copy} from "lucide-react"
 import { useAuth } from "@/contexts/AuthContext"
 import {createStepByStep, getStepBySteps, updateStepByStep, deleteStepByStep} from "@/services/firestore"
 import type {StepByStep} from "@/types"
@@ -40,6 +40,8 @@ const StepByStepTab: React.FC = () => {
 
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [stepToDelete, setStepToDelete] = useState<StepByStep | null>(null)
+  const [submitting, setSubmitting] = useState(false)
+
 
   useEffect(() => {
     if (user) {
@@ -108,6 +110,38 @@ const StepByStepTab: React.FC = () => {
     setConfirmOpen(true)
   }
 
+  const handleDuplicate = async (item: StepByStep) => {
+    if (!user) return
+
+    try {
+      const {id, error } = await createStepByStep({
+        userId: user.uid,
+        title: `Cópia de ${item.title}`,
+        description: item.description,
+        steps: [...item.steps],
+      })
+
+      if (!error && id) {
+        setStepBySteps((prev) => [
+          {
+            id,
+            userId: user.uid,
+            title: `Cópia de ${item.title}`,
+            description: item.description,
+            steps: [...item.steps],
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+          ...prev,
+        ])
+      }
+
+    } catch (error) {
+      console.error("Erro ao duplicar passo a passo:", error)
+    }
+  }
+
+
   const removeStep = (index: number) => {
     if (formData.steps.length > 1) {
       const newSteps = formData.steps.filter((_, i) => i !== index)
@@ -125,6 +159,8 @@ const StepByStepTab: React.FC = () => {
     const filteredSteps = formData.steps.filter((step) => step.trim() !== "")
     if (filteredSteps.length === 0) return
 
+    setSubmitting(true) // <- Início do carregamento
+
     try {
       if (editingItem) {
         const { error } = await updateStepByStep(editingItem.id, {
@@ -136,14 +172,26 @@ const StepByStepTab: React.FC = () => {
           await loadStepBySteps()
         }
       } else {
-        const { error } = await createStepByStep({
+        const { id, error } = await createStepByStep({
           userId: user.uid,
           title: formData.title,
           description: formData.description,
           steps: filteredSteps,
         })
-        if (!error) {
-          await loadStepBySteps()
+
+        if (!error && id) {
+          setStepBySteps((prev) => [
+            {
+              id,
+              userId: user.uid,
+              title: formData.title,
+              description: formData.description,
+              steps: filteredSteps,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            },
+            ...prev,
+          ])
         }
       }
 
@@ -151,6 +199,8 @@ const StepByStepTab: React.FC = () => {
       resetForm()
     } catch (error) {
       console.error("Erro ao salvar passo a passo:", error)
+    } finally {
+      setSubmitting(false) // <- Fim do carregamento
     }
   }
 
@@ -272,8 +322,19 @@ const StepByStepTab: React.FC = () => {
               </div>
 
               <DialogFooter>
-                <Button type="submit">{editingItem ? "Salvar Alterações" : "Criar Passo a Passo"}</Button>
+                <Button type="submit" disabled={submitting || formData.title.trim() === ""}>
+                  {submitting ? (
+                      <div className="flex items-center space-x-2">
+                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-t-transparent border-white"></div>
+                        <span>Salvando...</span>
+                      </div>
+                  ) : (
+                      editingItem ? "Salvar Alterações" : "Criar Passo a Passo"
+                  )}
+                </Button>
+
               </DialogFooter>
+
             </form>
           </DialogContent>
         </Dialog>
@@ -326,6 +387,9 @@ const StepByStepTab: React.FC = () => {
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
+                        <Button variant="outline" size="icon" onClick={() => handleDuplicate(item)}>
+                          <Copy className="h-4 w-4" />
+                        </Button>
                         <Button variant="outline" size="icon" onClick={() => handleEdit(item)}>
                           <Edit className="h-4 w-4" />
                         </Button>
